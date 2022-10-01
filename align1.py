@@ -118,6 +118,7 @@ seqs = []
 for record in records:
     seqs.append(record.seq)
 
+# Print values for each sequence
 for i in range(0, len(seqs)):
     score, perc = align(seqs[0], seqs[i])
     print(f"{i}\t {score}\t {perc:.2f}")
