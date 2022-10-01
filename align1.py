@@ -41,7 +41,7 @@ index = [row[0] for row in AASubstitutionMatrix[1:]]
 
 df = pd.DataFrame(rows, columns=columns, index=index)
 
-# Given 2 seqeunces, returns score and percentage
+# Given 2 seqeunces, returns optimal alignment score and identity percentage
 def align(seq1, seq2):
     n = len(seq1)
     m = len(seq2)
