@@ -48,14 +48,14 @@ def align(seq1, seq2):
 
     # Initialise 2D matrix
     a = [[0] * (n + 1) for i in range(m + 1)]
-    
+
     # Initialise top row
-    for i in range(1, n + 1):
-        a[i][0] = -1 * i * gapPenalty
+    for i in range(0, n + 1):
+        a[0][i] = -1 * i * gapPenalty
     
     # Initialise left column
-    for j in range(1, m + 1):
-        a[0][m] = -1 * j * gapPenalty
+    for j in range(0, m + 1):
+        a[j][0] = -1 * j * gapPenalty
 
     # Initialise pointer 2D matrix
     ps = [[0] * (n + 1) for i in range(m + 1)]
@@ -72,18 +72,18 @@ def align(seq1, seq2):
             elif yj not in columns:
                 sys.exit(f"Error: Unknown amino acid supplied: \"{yj}\". Exiting")
 
-            a[i][j] = max(a[i-1][j-1] + int(df[xi][yj]), a[i-1][j] - gapPenalty, a[i][j-1] - gapPenalty)
+            a[j][i] = max(a[j-1][i-1] + int(df[yj][xi]), a[j-1][i] - gapPenalty, a[j][i-1] - gapPenalty)
             
             # Set pointer
-            if a[i][j] == a[i-1][j-1] + int(df[xi][yj]):
+            if a[j][i] == a[j-1][i-1] + int(df[yj][xi]):
                 # diagonal
-                ps[i][j] = 1
-            elif a[i][j] == a[i-1][j] - gapPenalty:
+                ps[j][i] = 1
+            elif a[j][i] == a[j][i-1] - gapPenalty:
                 # left
-                ps[i][j] = 0
+                ps[j][i] = 3
             else:
                 # up
-                ps[i][j] = 2
+                ps[j][i] = 2
     
     # Traceback
     k = 0
@@ -92,10 +92,10 @@ def align(seq1, seq2):
     j = m
 
     while i > 0 or j > 0:
-        if ps[i][j] == 0:
+        if ps[j][i] == 3:
             # Left gap
             i -= 1
-        elif ps[i][j] == 2:
+        elif ps[j][i] == 2:
             # Up gap
             j -= 1
         else:
@@ -107,7 +107,7 @@ def align(seq1, seq2):
         
         k += 1
 
-    score = a[n][m]
+    score = a[m][n]
     percIds = 100 * (ids / k)
 
     return score, percIds
