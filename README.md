@@ -9,5 +9,5 @@
 
 With a fasta file `s501` containting amino acid sequences:
 ```sh
-python3 ./align1.py < s501 > a501
+python3 align1.py < s501 > a501
 ```
